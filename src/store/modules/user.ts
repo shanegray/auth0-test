@@ -12,7 +12,11 @@ export interface UserState {
   roles: string[];
 }
 
-@Module({ dynamic: true, store, name: "user" })
+@Module({
+  dynamic: true,
+  store,
+  name: "user"
+})
 class User extends VuexModule implements UserState {
   isAuthenticated = true;
   roles: string[] = [];
