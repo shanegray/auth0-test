@@ -15,7 +15,8 @@ export interface UserState {
 @Module({
   dynamic: true,
   store,
-  name: "user"
+  name: "user",
+  preserveState: true
 })
 class User extends VuexModule implements UserState {
   isAuthenticated = true;
