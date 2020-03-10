@@ -27,9 +27,19 @@ class User extends VuexModule implements UserState {
     this.isAuthenticated = auth;
   }
 
+  @Mutation
+  SET_ROLES(roles: string[]) {
+    this.roles = roles;
+  }
+
   @Action
   setAuth(auth: boolean) {
     this.SET_AUTH(auth);
+  }
+
+  @Action
+  setRoles(roles: string[]) {
+    this.SET_ROLES(roles);
   }
 }
 

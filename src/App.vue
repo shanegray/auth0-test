@@ -4,14 +4,14 @@
       <v-container>
         <v-row dense>
           <v-toolbar-title>Grady's Auth Test</v-toolbar-title>
-          <v-spacer></v-spacer>
           <v-btn text outlined @click="setAuth">Set Authenticated</v-btn>
           <v-btn text outlined @click="setUnauth">Set Unauthenticated</v-btn>
-          <!-- <v-btn text outlined @click="setAdmin">Set Admin</v-btn>
+          <v-btn text outlined @click="setAdmin">Set Admin</v-btn>
           <v-btn text outlined @click="setViewer">Set Viewer</v-btn>
           <v-btn text outlined @click="setAdminViewer">
             Set Admin & Viewer
-          </v-btn> -->
+          </v-btn>
+          <v-btn text outlined @click="clearRoles">Clear Roles</v-btn>
         </v-row>
       </v-container>
       <template v-slot:extension>
@@ -60,14 +60,17 @@ export default class extends Vue {
   setUnauth() {
     user.setAuth(false);
   }
-  // setAdmin() {
-  //   this.$store.dispatch("setRoles", ["admin"]);
-  // }
-  // setViewer() {
-  //   this.$store.dispatch("user/setRoles", ["viewer"]);
-  // }
-  // setAdminViewer() {
-  //   this.$store.dispatch("user/setRoles", ["admin", "viewer"]);
-  // }
+  setAdmin() {
+    user.setRoles(["admin"]);
+  }
+  setViewer() {
+    user.setRoles(["viewer"]);
+  }
+  setAdminViewer() {
+    user.setRoles(["admin", "viewer"]);
+  }
+  clearRoles() {
+    user.setRoles([]);
+  }
 }
 </script>
