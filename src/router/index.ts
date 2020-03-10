@@ -7,6 +7,7 @@ import Authenticated from "@/views/authenticated.vue";
 import Login from "@/views/Login.vue";
 import Unauthorized from "@/views/Unauthorized.vue";
 import user from "@/store/modules/user";
+import { getInstance } from "@/auth";
 
 Vue.use(VueRouter);
 
@@ -53,24 +54,40 @@ router.beforeEach((to, from, next) => {
   // TODO : Figure out sub nav
   // const requiresAuth = to.matched.some(r => r.meta.allowAnonymous)
 
-  const userHasRoles = user.roles && user.roles.length;
+  const authService = getInstance();
 
-  if (to.meta.allowAnonymous) {
-    next();
-  } else if (!user.isAuthenticated) {
-    next({ name: "login" });
-  } else {
-    if (to.meta.roles && !userHasRoles) {
-      next("/unauthorized");
-    } else if (!to.meta.roles) {
+  const navigateFn = () => {
+    // set store
+    user.setAuth(authService.isAuthenticated);
+
+    const userHasRoles = user.roles && user.roles.length;
+
+    if (to.meta.allowAnonymous) {
       next();
-    } else if (user.roles.some(r => to.meta.roles.includes(r))) {
-      next();
+    } else if (!user.isAuthenticated) {
+      next({ name: "login" });
     } else {
-      console.log("NO WAY");
-      next("/unauthorized");
+      if (to.meta.roles && !userHasRoles) {
+        next("/unauthorized");
+      } else if (!to.meta.roles) {
+        next();
+      } else if (user.roles.some(r => to.meta.roles.includes(r))) {
+        next();
+      } else {
+        next("/unauthorized");
+      }
     }
+  };
+
+  if (!authService.loading) {
+    return navigateFn();
   }
+
+  authService.$watch("loading", loading => {
+    if (loading === false) {
+      return navigateFn();
+    }
+  });
 });
 
 export default router;
