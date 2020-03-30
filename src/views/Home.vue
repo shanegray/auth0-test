@@ -43,8 +43,11 @@ export default {
     async something() {
       // Get the access token from the auth wrapper
       const token = await this.$auth.getTokenSilently();
+      const claims = await this.$auth.getIdTokenClaims();
+      const parsed = this.parseJwt(token);
 
-      console.log("token :", token);
+      console.log("token :", claims);
+      console.log("parsed :", parsed);
 
       // // Use Axios to make a call to the API
       // const { data } = await axios.get("/api/private-scoped", {
@@ -54,6 +57,20 @@ export default {
       // });
 
       // console.log("data :", data);
+    },
+    parseJwt(token) {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function(c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+
+      return JSON.parse(jsonPayload);
     }
   }
 };
