@@ -20,9 +20,8 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "Home",
@@ -41,13 +40,23 @@ export default {
       });
     },
     async something() {
-      // Get the access token from the auth wrapper
+      // // Get the access token from the auth wrapper
       const token = await this.$auth.getTokenSilently();
-      const claims = await this.$auth.getIdTokenClaims();
-      const parsed = this.parseJwt(token);
+      // const claims = await this.$auth.getIdTokenClaims();
+      // const parsed = this.parseJwt(token);
 
-      console.log("token :", claims);
-      console.log("parsed :", parsed);
+      console.log("token :", token);
+      // console.log("parsed :", parsed);
+
+      const user = await this.$auth.getIdTokenClaims();
+      console.log("id claims :", user);
+
+      // try {
+      //   const response = await axios.get("/api/orders");
+      //   console.log("response :", response);
+      // } catch (e) {
+      //   console.error(e);
+      // }
 
       // // Use Axios to make a call to the API
       // const { data } = await axios.get("/api/private-scoped", {

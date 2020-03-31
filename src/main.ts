@@ -6,6 +6,7 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
+import axios from "axios";
 
 import { domain, clientId, audience } from "../auth-config.json";
 import { Auth0Plugin } from "./auth";
@@ -24,6 +25,12 @@ Vue.use(Auth0Plugin, {
 });
 
 Vue.config.productionTip = false;
+
+axios.interceptors.request.use(async config => {
+  const token = await Vue.prototype.$auth.getTokenSilently();
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 new Vue({
   router,

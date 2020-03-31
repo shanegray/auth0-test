@@ -3,7 +3,7 @@ module.exports = {
   devServer: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000"
+        target: "https://europe-west2-gradys-fire-door-dev.cloudfunctions.net"
       }
     }
   }
